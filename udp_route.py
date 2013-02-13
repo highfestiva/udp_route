@@ -41,8 +41,10 @@ def runrouter(targetaddr, boundaddr, latency = 0.32, jitter = 0.05, loss = 1.0, 
 			if onsend: onsend()
 		delay = uniform(0.0, jitter)
 		if fromaddr == targetaddr:
+			# Server to client.
 			scheduler.enter(delay, sock.sendto, (data, lastclientaddr))
 		else:
+			# Client to server.
 			lastclientaddr = fromaddr
 			scheduler.enter(delay, sock.sendto, (data, targetaddr))
 
@@ -62,11 +64,12 @@ def main():
 		print('d', end='', flush=True)
 	def onexcept(e):
 		print('\nError:', e)
-	print('Running UDP route towards server: %s.' % str(targetaddr))
-	print('Connect your client to:           %s.' % str(boundaddr))
-	print('Latency setting:                  %g' % latency)
-	print('Jitter setting:                   %g' % jitter)
-	print('Packet loss setting:              %g%%' % loss)
+	print('UDP (game) router by highfestiva@pixeldoctrine.com.')
+	print('Sending towards server: %s.' % str(targetaddr))
+	print('Connect your client to: %s.' % str(boundaddr))
+	print('Latency setting:        %g' % latency)
+	print('Jitter setting:         %g' % jitter)
+	print('Packet loss setting:    %g%%' % loss)
 	print('. means packet routed, d means packet dropped.')
 	runrouter(targetaddr, boundaddr, latency, jitter, loss, onsend, ondrop)
 
