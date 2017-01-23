@@ -39,7 +39,7 @@ def runrouter(targetaddr, boundaddr, latency = 0.32, jitter = 0.05, loss = 1.0, 
 			continue
 		else:
 			if onsend: onsend()
-		delay = uniform(0.0, jitter)
+		delay = latency + uniform(0.0, jitter)
 		if fromaddr == targetaddr:
 			# Server to client.
 			scheduler.enter(delay, sock.sendto, (data, lastclientaddr))
@@ -71,7 +71,7 @@ def main():
 	print('Jitter setting:         %g' % jitter)
 	print('Packet loss setting:    %g%%' % loss)
 	print('. means packet routed, d means packet dropped.')
-	runrouter(targetaddr, boundaddr, latency, jitter, loss, onsend, ondrop)
+	runrouter(targetaddr, boundaddr, latency, jitter, loss, onsend, ondrop, onexcept)
 
 
 if __name__ == '__main__':
